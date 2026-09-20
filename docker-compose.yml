@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: relaydesk
+      POSTGRES_PASSWORD: relaydesk
+      POSTGRES_DB: relaydesk
+    volumes:
+      - relaydesk_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U relaydesk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  ai:
+    build: ./ai
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./api
+    environment:
+      API_PORT: 8080
+      DATABASE_URL: postgres://relaydesk:relaydesk@postgres:5432/relaydesk?sslmode=disable
+      AI_SERVICE_URL: http://ai:8000
+      JEV_API_KEY: ${JEV_API_KEY:-}
+      JEV_MODEL: ${JEV_MODEL:-jev-latest}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ai:
+        condition: service_healthy
+
+  web:
+    build: ./web
+    environment:
+      VITE_API_URL: http://localhost:8080
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+volumes:
+  relaydesk_postgres:

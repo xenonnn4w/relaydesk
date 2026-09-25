@@ -6,6 +6,7 @@ __pycache__/
 *.pyc
 .DS_Store
 coverage/
+outputs/
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts

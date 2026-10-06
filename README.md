@@ -2,8 +2,6 @@
 
 RelayDesk is an AI-assisted support operations console built to demonstrate the engineering problems behind conversational support products: multi-source ingestion, structured ticket state, SLA visibility, ML-assisted triage, immutable activity history, and engineering escalation.
 
-It is intentionally a focused product slice rather than a ClearFeed clone.
-
 ## What works
 
 - Unified queue for Slack, Discord, and web-chat requests
@@ -20,6 +18,8 @@ It is intentionally a focused product slice rather than a ClearFeed clone.
 - Responsive operations-console interface
 
 ## Architecture
+
+<img width="1224" height="627" alt="Screenshot From 2026-10-06 23-33-02" src="https://github.com/user-attachments/assets/fe66f8a4-134d-4baf-99cf-17737ec976c8" />
 
 ```text
 Slack / Discord / Web simulator
